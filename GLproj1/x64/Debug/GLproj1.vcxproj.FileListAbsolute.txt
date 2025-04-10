@@ -1,0 +1,6 @@
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\x64\Debug\assimp-vc143-mtd.dll
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\x64\Debug\poly2tri.dll
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\x64\Debug\minizip.dll
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\x64\Debug\zlibd1.dll
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\x64\Debug\pugixml.dll
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\GLproj1\x64\Debug\GLproj1.vcxproj.Up2Date

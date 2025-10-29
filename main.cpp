@@ -19,11 +19,11 @@ void processInput(GLFWwindow* window);
 unsigned int loadTexture(char const *path);
 
 //Screen settings
-const unsigned int SCR_WIDTH  = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH  = 1000;
+const unsigned int SCR_HEIGHT = 800;
 
 //Camera
-Camera camera(glm::vec3(0.0f, 2.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 4.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -45,7 +45,7 @@ int main()
 #endif
 
     //GLFW window init
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -67,12 +67,14 @@ int main()
     }
 
     glEnable(GL_DEPTH_TEST); //config global opengl state to enable builtin depth testing
+    glEnable(GL_BLEND);
 
     //Shaders
     Shader modelShader("shaders/modelVS.glsl", "shaders/modelFS.glsl");
 
     //Models
-    Model building("models/industrial_building1.obj");
+    Model building1("models/collage2.obj");
+    Model building2("models/collagetest.obj");
 
     //RENDER LOOP
     while (!glfwWindowShouldClose(window))
@@ -87,7 +89,7 @@ int main()
         //Background
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+         
         //Activate shader
         modelShader.use();
 
@@ -97,16 +99,24 @@ int main()
         modelShader.setMat4("projection", projection);
         modelShader.setMat4("view", view);
 
-        //Render model
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); //center of scene
-        model = glm::rotate(model, 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
-        model = glm::translate(model, glm::vec3(-10.0f, 0.0f, 0.0f));
+        //Render models
+        glm::mat4 model1 = glm::mat4(1.0f); //building 1
+        glm::mat4 model2 = glm::mat4(1.0f); //building 2
+
+        model1 = glm::scale(model1, glm::vec3(1.5f, 1.5f, 1.5f));
+        model1 = glm::translate(model1, glm::vec3(0.0f, 0.0f, 0.0f)); //center of scene
+        model1 = glm::rotate(model1, 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+        model1 = glm::translate(model1, glm::vec3(-20.0f, 0.0f, 0.0f));
+
+        model2 = glm::scale(model2, glm::vec3(2.0f, 2.0f, 2.0f));
+        model2 = glm::translate(model2, glm::vec3(-10.0f, 0.0f, 0.0f));  
         
-        
-        modelShader.setMat4("model", model);
-        building.Draw(modelShader);
+        modelShader.setMat4("model", model1);
+        building1.Draw(modelShader);
+
+
+        //modelShader.setMat4("model", model2); IN PROGRESS
+        //building2.Draw(modelShader); IN PROGRESS
 
         glfwSwapBuffers(window);
         glfwPollEvents(); //Keys pressed, mouse, etc
@@ -124,7 +134,7 @@ void processInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
-    const float cameraSpeed = 2.5f * dT;
+    //const float cameraSpeed = 10.0f * dT;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         camera.ProcessKeyboard(FORWARD,dT);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -197,6 +207,6 @@ unsigned int loadTexture(char const * path)
         std::cout << "Texture failed to load at path: " << path << std::endl;
         stbi_image_free(data);
     }
-
+    
     return textureID;
 }

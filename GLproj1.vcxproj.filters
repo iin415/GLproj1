@@ -58,34 +58,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\colorsFS.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="shaders\colorsVS.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="shaders\fshader.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="shaders\lightCubeFS.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="shaders\lightCubeVS.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="shaders\modelFS.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
     <None Include="shaders\modelVS.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="shaders\vshader.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="modelLightingVS.glsl">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="modelLightingFS.glsl">
+    <None Include="shaders\modelFS.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

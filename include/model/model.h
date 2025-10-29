@@ -38,7 +38,7 @@ public:
         loadModel(path);
     }
 
-    // draws the model, and thus all its meshes
+    // draws the model & all its meshes
     void Draw(Shader& shader)
     {
         for (unsigned int i = 0; i < meshes.size(); i++)
@@ -207,6 +207,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
 {
     string filename = string(path);
     filename = directory + '/' + filename;
+    std::cout << "[TextureFromFile] trying: " << filename << std::endl;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
@@ -215,6 +216,8 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
     unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
+        std::cout << "[TextureFromFile] loaded: " << filename << " (" << width << "x" << height <<
+            ", comps=" << nrComponents << ") -> ID " << textureID << std::endl;
         GLenum format;
         if (nrComponents == 1)
             format = GL_RED;

@@ -22,6 +22,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\camera\camera.h" />
@@ -33,8 +34,11 @@
     <ClInclude Include="include\model\mesh.h" />
     <ClInclude Include="include\model\model.h" />
     <ClInclude Include="include\shaders\shader.h" />
+    <ClInclude Include="include\TextRenderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\groundFS.glsl" />
+    <None Include="shaders\groundVS.glsl" />
     <None Include="shaders\modelFS.glsl" />
     <None Include="shaders\modelVS.glsl" />
   </ItemGroup>
@@ -93,6 +97,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\lib;$(LibraryPath)</LibraryPath>
+    <CopyCppRuntimeToOutputDir>true</CopyCppRuntimeToOutputDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -128,13 +133,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\include;C:\Users\ratat\vcpkg\installed\x64-windows\include;C:\Users\ratat\vcpkg\installed\x64-windows\include\freetype2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mt.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\ratat\OneDrive\vcpkg\installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "C:\Users\ratat\vcpkg\installed\x64-windows\bin\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

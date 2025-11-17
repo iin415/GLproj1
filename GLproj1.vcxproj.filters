@@ -27,6 +27,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GLFW\glfw3.h">
@@ -56,12 +59,21 @@
     <ClInclude Include="include\model\model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\TextRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\modelVS.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="shaders\modelFS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="shaders\groundFS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="shaders\groundVS.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

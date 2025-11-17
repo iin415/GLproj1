@@ -56,23 +56,40 @@ public:
 		unsigned int specularNr = 1;
 		unsigned int normalNr   = 1;
 		unsigned int heightNr   = 1;
+		unsigned int textureUnit = 0;
 
+		// Prioritize diffuse textures to bind them to unit 0
 		for (unsigned int i = 0; i < textures.size(); i++)
 		{
-			glActiveTexture(GL_TEXTURE0 + i);
-			string num;
+			if (textures[i].Type == "texture_diffuse") {
+				glActiveTexture(GL_TEXTURE0 + textureUnit);
+				string num = std::to_string(diffuseNr++);
+				glUniform1i(glGetUniformLocation(shader.ID, ("texture_diffuse" + num).c_str()), textureUnit);
+				glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+				textureUnit++;
+			}
+		}
+
+		// Bind other texture types
+		for (unsigned int i = 0; i < textures.size(); i++)
+		{
 			string name = textures[i].Type;
-			if (name == "texture_diffuse")
-				num = std::to_string(diffuseNr++);
-			else if (name == "texture_specular")
+			if (name == "texture_diffuse") {
+				continue; // already bound
+			}
+
+			glActiveTexture(GL_TEXTURE0 + textureUnit);
+			string num;
+			if (name == "texture_specular")
 				num = std::to_string(specularNr++);
 			else if (name == "texture_normal")
 				num = std::to_string(normalNr++);
 			else if (name == "texture_height")
 				num = std::to_string(heightNr++);
 
-			glUniform1i(glGetUniformLocation(shader.ID, (name + num).c_str()), i);
+			glUniform1i(glGetUniformLocation(shader.ID, (name + num).c_str()), textureUnit);
 			glBindTexture(GL_TEXTURE_2D, textures[i].ID);
+			textureUnit++;
 		}
 
 		glBindVertexArray(VAO);

@@ -41,6 +41,8 @@
   <ItemGroup>
     <None Include="shaders\groundFS.glsl" />
     <None Include="shaders\groundVS.glsl" />
+    <None Include="shaders\menuFS.glsl" />
+    <None Include="shaders\menuVS.glsl" />
     <None Include="shaders\modelFS.glsl" />
     <None Include="shaders\modelVS.glsl" />
   </ItemGroup>

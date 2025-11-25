@@ -1,5 +1,7 @@
 ﻿  Collision.cpp
   main.cpp
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\main.cpp(429,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\main.cpp(535,13): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
   stb_image.cpp
   TextRenderer.cpp
   Generating Code...

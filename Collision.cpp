@@ -70,12 +70,12 @@ glm::vec3 ResolveCameraCollisions(
     const glm::vec3& oldPos,
     const glm::vec3& moveDirInput,
     float radius,
-    float setY,
+    float currentY,
     const std::vector<WorldObject>& worldObjects
 ) {
     glm::vec3 moveDir = moveDirInput;
     glm::vec3 newPos = oldPos + moveDir;
-    newPos.y = setY;
+    newPos.y = currentY;
 
     glm::vec2 newXZ(newPos.x, newPos.z);
 
@@ -99,6 +99,7 @@ glm::vec3 ResolveCameraCollisions(
                     moveDir.x = slide.x;
                     moveDir.z = slide.y;
                     newPos = oldPos + moveDir;
+                    newPos.y = currentY; //prevent vertical sliding
                     newXZ = glm::vec2(newPos.x, newPos.z);
                 }
             }

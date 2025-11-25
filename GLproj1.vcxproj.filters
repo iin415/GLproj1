@@ -82,5 +82,11 @@
     <None Include="shaders\groundVS.glsl">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="shaders\menuFS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="shaders\menuVS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

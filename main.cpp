@@ -61,6 +61,9 @@ static float bobBaseHeight = 2.7f; // center Y
 static float bobFrequency = 9.0f; // i.e. speed
 float bobTime = 0.0f; //keep track of walking animation
 
+//light color for scene
+glm::vec3 sceneColor = glm::vec3(0.3f, 0.2f, 0.6f);
+
 //Player flashlight
 static bool flashlight = false;
 static float innerCut = glm::cos(glm::radians(5.0f));
@@ -261,8 +264,6 @@ int main()
 
         glm::mat4 view = camera.GetViewMatrix();
 
-        glm::vec3 sceneColor = glm::vec3(0.3f, 0.3f, 0.3f);
-
         //Ground
         groundShader.use();
         glActiveTexture(GL_TEXTURE0);
@@ -348,20 +349,20 @@ int main()
         //}
 
         //Render camera position text
-        //{
-        //    std::ostringstream ss;
-        //    ss << std::fixed << std::setprecision(2);
-        //    ss << "X: " << camera.Position.x << "   Y: " << camera.Position.y << "   Z: " << camera.Position.z
-        //       << "   Dir: (" << camera.Front.x << ", "  << camera.Front.y << ", " << camera.Front.z << ")"
-        //        << "   Light on?: " << flashlight;
-        //    std::string camText = ss.str();
-        //
-        //    // Draw in top-left corner
-        //    float x = 25.0f;
-        //    float y = static_cast<float>(SCR_HEIGHT) - 50.0f;
-        //    float scale = 0.5f;
-        //    textRenderer.Render(textShader.ID, camText, x, y, scale, glm::vec3(0.9f, 0.9f, 0.3f));
-        //}
+        {
+            std::ostringstream ss;
+            ss << std::fixed << std::setprecision(2);
+            ss << "X: " << camera.Position.x << "   Y: " << camera.Position.y << "   Z: " << camera.Position.z
+               << "   Dir: (" << camera.Front.x << ", "  << camera.Front.y << ", " << camera.Front.z << ")"
+                << "   Light on?: " << flashlight;
+            std::string camText = ss.str();
+        
+            // Draw in top-left corner
+            float x = 25.0f;
+            float y = static_cast<float>(SCR_HEIGHT) - 50.0f;
+            float scale = 0.5f;
+            textRenderer.Render(textShader.ID, camText, x, y, scale, glm::vec3(0.9f, 0.2f, 0.2f));
+        }
 
         //GAME MENU render simple image
         if (state == PAUSED) {

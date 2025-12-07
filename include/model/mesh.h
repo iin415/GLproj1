@@ -11,7 +11,7 @@
 #include <vector>
 using namespace std;
 
-#define MAX_BONE_INFLUENCE 4
+constexpr int MAX_BONE_INFLUENCE = 4;
 
 struct Vertex {
 	glm::vec3 Position;
@@ -20,13 +20,13 @@ struct Vertex {
 	glm::vec3 Tangent;
 	glm::vec3 Bitangent;
 	//Bone indexes which will influence this vertex
-	int m_BoneIDs[MAX_BONE_INFLUENCE];
+	int m_BoneIDs[MAX_BONE_INFLUENCE] = { 0 };
 	//Weights from each bone
-	float m_Weights[MAX_BONE_INFLUENCE];
+	float m_Weights[MAX_BONE_INFLUENCE] = { 0.0f };
 };
 
 struct Texture {
-	unsigned int ID;
+	unsigned int ID = 0;
 	string Type;
 	string Path;
 };

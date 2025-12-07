@@ -1,18 +1,10 @@
-﻿  Collision.cpp
-  main.cpp
-C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\main.cpp(430,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\main.cpp(536,13): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
-  stb_image.cpp
-  TextRenderer.cpp
-  Generating Code...
-  glad.c
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  main.cpp
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\include\model\model.h(272,64): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  (compiling source file 'main.cpp')
+  
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\main.cpp(516,54): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\main.cpp(840,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   GLproj1.vcxproj -> C:\Users\ratat\OneDrive\Desktop\GRAPHICS\GLproj1\x64\Debug\GLproj1.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.
-  C:\Users\ratat\vcpkg\installed\x64-windows\bin\brotlicommon.dll
-  C:\Users\ratat\vcpkg\installed\x64-windows\bin\brotlidec.dll
-  C:\Users\ratat\vcpkg\installed\x64-windows\bin\minizip.dll
-  C:\Users\ratat\vcpkg\installed\x64-windows\bin\poly2tri.dll
-  C:\Users\ratat\vcpkg\installed\x64-windows\bin\pugixml.dll
-  5 File(s) copied
+  0 File(s) copied

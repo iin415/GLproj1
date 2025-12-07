@@ -11,6 +11,8 @@ void TextRenderer::Init(const std::string& fontPath, unsigned int width, unsigne
     SCR_WIDTH = width;
     SCR_HEIGHT = height;
 
+    textShaderID = shaderID;
+
     // Initialize FreeType
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
@@ -24,11 +26,18 @@ void TextRenderer::Init(const std::string& fontPath, unsigned int width, unsigne
         return;
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 48);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+    FT_Set_Pixel_Sizes(face, 0, 40);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); //Disable byte-alignment restriction
+
+    //scaled bounding box coordinates
+    int bbox_ymax = FT_MulFix(face->bbox.yMax, face->size->metrics.y_scale) >> 6;
+    int bbox_ymin = FT_MulFix(face->bbox.yMin, face->size->metrics.y_scale) >> 6;
+    // Calculate the line/font height from the bounding box
+    lineHeight = bbox_ymax - bbox_ymin;
 
     // Load first 128 ASCII characters
     for (unsigned char c = 0; c < 128; c++) {
+        if (c == '\n' || c == '\r' || c == '\t') continue;
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
             std::cout << "ERROR::FREETYPE: Failed to load Glyph " << c << std::endl;
             continue;
@@ -72,7 +81,7 @@ void TextRenderer::Init(const std::string& fontPath, unsigned int width, unsigne
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // Set orthographic projection in shader
+    // Set ortho in shader
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(SCR_WIDTH),
         0.0f, static_cast<float>(SCR_HEIGHT));
     glUseProgram(shaderID);
@@ -85,7 +94,16 @@ void TextRenderer::Render(unsigned int shaderID, const std::string& text, float 
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
+    float startX = x;
+
     for (char c : text) {
+
+        if (c == '\n') {
+            x = startX;
+            y -= lineHeight * scale;
+            continue;
+        }
+
         if (Characters.find(c) == Characters.end()) continue;
         Character ch = Characters[c];
 
@@ -115,4 +133,21 @@ void TextRenderer::Render(unsigned int shaderID, const std::string& text, float 
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void TextRenderer::UpdateProjection(unsigned int width, unsigned int height)
+{
+    SCR_WIDTH = width;
+    SCR_HEIGHT = height;
+
+    glm::mat4 projection = glm::ortho(
+        0.0f, (float)width,
+        0.0f, (float)height
+    );
+
+    glUseProgram(textShaderID);
+    glUniformMatrix4fv(
+        glGetUniformLocation(textShaderID, "projection"),
+        1, GL_FALSE, glm::value_ptr(projection)
+    );
 }

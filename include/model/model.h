@@ -45,6 +45,8 @@ public:
             meshes[i].Draw(shader);
     }
 
+    void DrawInstanced(Shader& shader, int instanceCount);
+
 private:
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
     void loadModel(string const& path)
@@ -218,7 +220,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
     {
         //std::cout << "[TextureFromFile] loaded: " << filename << " (" << width << "x" << height <<
         //    ", comps=" << nrComponents << ") -> ID " << textureID << std::endl;
-        GLenum format;
+        GLenum format = GL_RGB;
         if (nrComponents == 1)
             format = GL_RED;
         else if (nrComponents == 3)
@@ -245,4 +247,33 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
 
     return textureID;
 }
+
+void Model::DrawInstanced(Shader& shader, int instanceCount)
+{
+    shader.setBool("useInstancing", true);
+
+    for (Mesh& mesh : meshes)
+    {
+        // Bind all mesh textures
+        unsigned int diffuseNr = 1;
+        unsigned int specularNr = 1;
+        for (unsigned int i = 0; i < mesh.textures.size(); i++)
+        {
+            glActiveTexture(GL_TEXTURE0 + i);
+            std::string number;
+            std::string name = mesh.textures[i].Type;
+            if (name == "texture_diffuse") number = std::to_string(diffuseNr++);
+            else if (name == "texture_specular") number = std::to_string(specularNr++);
+            shader.setInt((name + number).c_str(), i);
+            glBindTexture(GL_TEXTURE_2D, mesh.textures[i].ID);
+        }
+
+        glBindVertexArray(mesh.VAO);
+        glDrawElementsInstanced(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0, instanceCount);
+        glBindVertexArray(0);
+    }
+
+    shader.setBool("useInstancing", false);
+}
+
 #endif

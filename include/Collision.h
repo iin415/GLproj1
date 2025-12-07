@@ -9,8 +9,12 @@ struct XZHull {
 };
 
 struct WorldObject {
-    Model* model;
-    glm::mat4 modelMatrix;
+    Model* model = nullptr;
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+
+    float boundingRadius = 5.0f;
+    glm::vec3 center = glm::vec3(0.0f);
+
     std::vector<XZHull> hulls;
 };
 

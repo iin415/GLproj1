@@ -24,10 +24,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
-void AddWorldObject(std::vector<WorldObject>& worldObjects, Model& model, glm::mat4 modelMatrix, float maxY);
 unsigned int LoadTexture(const char* path);
+
 void UpdateMenuQuad();
 void UpdateUIProjection(GLFWwindow* window);
+
+void AddWorldObject(std::vector<WorldObject>& worldObjects, Model& model, glm::mat4 modelMatrix, float maxY);
 bool IsPointInPolygon(const glm::vec2& point, const std::vector<glm::vec2>& poly);
 bool IsFarEnough(const glm::vec2& candidate, const std::vector<glm::vec3>& points, float minDistance);
 std::vector<glm::vec3> GenerateRandomPoints(int count, float areaSize,
@@ -81,9 +83,9 @@ glm::vec3 sceneColor = glm::vec3(0.15f, 0.25f, 0.8f);
 static bool flashlight = false;
 static float innerCut = glm::cos(glm::radians(5.0f));
 static float outerCut = glm::cos(glm::radians(20.0f));
-glm::vec3 flashColor = glm::vec3(1.0f, 0.98f, 0.5f);
-static float strength = 1.1f;
-static float newStrength = 1.1f;
+glm::vec3 flashColor = glm::vec3(1.0f, 1.0f, 0.3f);
+static float strength = 1.0f;
+static float newStrength = 1.0f;
 
 static float flickerTimer = 0.0f;
 static float flickerDuration = 0.1f;
@@ -95,15 +97,6 @@ std::vector<WorldObject> worldObjects;
 
 //Matrices (need to update projection when window size is changed)
 glm::mat4 projection;
-
-//Frustum culling stuff, TODO
-struct Plane {
-    glm::vec3 norm = { 0.0f, 1.0f, 0.0f };
-    float dist = 0.0f;
-};
-struct Frustum {
-    Plane top, bottom, left, right, near, far;
-};
 
 //Game states
 enum GameState {
@@ -237,7 +230,7 @@ int main()
 
     std::vector<glm::mat4> treeTransforms;
     int treeCount = 100;
-    float area = 70.0f;
+    float area = 50.0f;
     float minDistance = 2.0f;
     float baseTreeRadius = 0.8f;
     // Generate valid random positions
@@ -253,7 +246,7 @@ int main()
     treePositions2D.clear();
     treeCollisionRadii.clear();
 
-    srand(2480); //fixed seed
+    srand(1234); //fixed seed
     for (const glm::vec3& pos : treePositions3D) {
         float scale = 0.5f + static_cast<float>(rand()) / RAND_MAX * 1.0f;
 
@@ -784,56 +777,6 @@ void UpdateUIProjection(GLFWwindow* window)
     UpdateMenuQuad();
 }
 
-void GetFrustum(const glm::mat4& VP, Frustum& frustum)
-{
-    // Left
-    frustum.left.norm.x = VP[0][3] + VP[0][0];
-    frustum.left.norm.y = VP[1][3] + VP[1][0];
-    frustum.left.norm.z = VP[2][3] + VP[2][0];
-    frustum.left.dist = VP[3][3] + VP[3][0];
-
-    // Right
-    frustum.right.norm.x = VP[0][3] - VP[0][0];
-    frustum.right.norm.y = VP[1][3] - VP[1][0];
-    frustum.right.norm.z = VP[2][3] - VP[2][0];
-    frustum.right.dist = VP[3][3] - VP[3][0];
-
-    // Bottom
-    frustum.bottom.norm.x = VP[0][3] + VP[0][1];
-    frustum.bottom.norm.y = VP[1][3] + VP[1][1];
-    frustum.bottom.norm.z = VP[2][3] + VP[2][1];
-    frustum.bottom.dist = VP[3][3] + VP[3][1];
-
-    // Top
-    frustum.top.norm.x = VP[0][3] - VP[0][1];
-    frustum.top.norm.y = VP[1][3] - VP[1][1];
-    frustum.top.norm.z = VP[2][3] - VP[2][1];
-    frustum.top.dist = VP[3][3] - VP[3][1];
-
-    // Near
-    frustum.near.norm.x = VP[0][3] + VP[0][2];
-    frustum.near.norm.y = VP[1][3] + VP[1][2];
-    frustum.near.norm.z = VP[2][3] + VP[2][2];
-    frustum.near.dist = VP[3][3] + VP[3][2];
-
-    // Far
-    frustum.far.norm.x = VP[0][3] - VP[0][2];
-    frustum.far.norm.y = VP[1][3] - VP[1][2];
-    frustum.far.norm.z = VP[2][3] - VP[2][2];
-    frustum.far.dist = VP[3][3] - VP[3][2];
-
-    Plane* planes[] = { &frustum.left, &frustum.right, &frustum.bottom,
-                        &frustum.top, &frustum.near, &frustum.far };
-
-    for (Plane* p : planes)     //Normalize planes
-    {
-        float len = glm::length(p->norm);
-        p->norm /= len;
-        p->dist /= len;
-    }
-}
-
-
 //------------------TREE STUFF---------------------------------
 bool IsPointInPolygon(const glm::vec2& point, const std::vector<glm::vec2>& poly)
 {
@@ -868,10 +811,9 @@ std::vector<glm::vec3> GenerateRandomPoints(int count, float areaSize,
 {
     std::vector<glm::vec3> points;
     points.reserve(count);
-    srand(static_cast<unsigned int>(time(nullptr))); // seed RNG
 
     int attempts = 0;
-    int maxAttempts = count * 100; // increase attempts due to minDistance constraint
+    int maxAttempts = count * 50; // increase attempts due to minDistance constraint
 
     while (points.size() < count && attempts < maxAttempts) {
         attempts++;
@@ -884,9 +826,6 @@ std::vector<glm::vec3> GenerateRandomPoints(int count, float areaSize,
             if (IsFarEnough(candidate, points, minDistance))
                 points.push_back(glm::vec3(x, 0.0f, z));
     }
-
-    if (points.size() < count)
-        std::cerr << "Warning: Only generated " << points.size() << " points out of " << count << std::endl;
 
     return points;
 }

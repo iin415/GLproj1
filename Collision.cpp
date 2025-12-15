@@ -23,27 +23,27 @@ std::vector<glm::vec2> ComputeConvexHullXZ(
 
     if (points.size() <= 2) return points;
 
-    //sort points by x, then z
+    //sort points by x, then z so hull can be built sequentially
     std::sort(points.begin(), points.end(), [](const glm::vec2& a, const glm::vec2& b) {
         return a.x < b.x || (a.x == b.x && a.y < b.y);
-        });
+    });
 
     std::vector<glm::vec2> hull;
 
-    // Lower hull
+    // Lower hull, left to right, counterclockwise 
     for (auto& p : points) {
         while (hull.size() >= 2 && cross(hull[hull.size() - 2], hull[hull.size() - 1], p) <= 0)
             hull.pop_back();
-        hull.push_back(p);
+        hull.push_back(p); //if last turn is not CCW i.e. cross <=0, remove middle point. Keep hull convex
     }
 
-    // Upper hull
+    // Upper hull, right to left
     size_t lowerSize = hull.size();
     for (int i = (int)points.size() - 2; i >= 0; i--) {
         glm::vec2 p = points[i];
         while (hull.size() > lowerSize && cross(hull[hull.size() - 2], hull[hull.size() - 1], p) <= 0)
             hull.pop_back();
-        hull.push_back(p);
+        hull.push_back(p); //starts from second to last point and goes backwards, removes points that break convexity
     }
 
     hull.pop_back(); //Last point == first point
